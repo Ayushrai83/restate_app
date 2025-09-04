@@ -21,32 +21,26 @@ export const account = new Account(client);
 export async function login() {
   try {
     const redirectUri = Linking.createURL("/");
+
     const response = await account.createOAuth2Token(
       OAuthProvider.Google,
       redirectUri
     );
-
-    if (!response) throw new Error("Failed to login with Google");
+    if (!response) throw new Error("Create OAuth2 token failed");
 
     const browserResult = await openAuthSessionAsync(
       response.toString(),
       redirectUri
     );
-
-    if (browserResult.type != "success") {
-      throw new Error("Authentication cancelled");
-    }
+    if (browserResult.type !== "success")
+      throw new Error("Create OAuth2 token failed");
 
     const url = new URL(browserResult.url);
-
     const secret = url.searchParams.get("secret")?.toString();
     const userId = url.searchParams.get("userId")?.toString();
+    if (!secret || !userId) throw new Error("Create OAuth2 token failed");
 
-    if (!secret || !userId) {
-      throw new Error("Failed to login with Google");
-    }
-    const session = await account.createOAuth2Session(userId, secret);
-
+    const session = await account.createSession(userId, secret);
     if (!session) throw new Error("Failed to create session");
 
     return true;
@@ -66,7 +60,7 @@ export async function logout() {
   }
 }
 
-export async function getUser() {
+export async function getCurrentUser() {
   try {
     const response = await account.get();
 
