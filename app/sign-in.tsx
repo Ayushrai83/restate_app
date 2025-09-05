@@ -1,27 +1,51 @@
-import icons from '@/constants/icons'
-import images from '@/constants/images'
-import { login } from '@/lib/appwrite'
-import React from 'react'
-import { Alert, Image, ScrollView, Text, TouchableOpacity, View } from 'react-native'
-import { SafeAreaView } from 'react-native-safe-area-context'
+import React from "react";
+import {
+  Alert,
+  Image,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
-const SignIn = () => {
+import icons from "@/constants/icons";
+import images from "@/constants/images";
+import { login } from "@/lib/appwrite";
+import { useGlobalContext } from "@/lib/global-provider";
+import { Redirect } from "expo-router";
+
+const Auth = () => {
+  const { refetch, loading, isLogged } = useGlobalContext();
+
+  if (!loading && isLogged) return <Redirect href="/" />;
+
   const handleLogin = async () => {
     const result = await login();
-
     if (result) {
-      console.log("Login successful");
-    }else{
-      Alert.alert('Error',"Login failed");
+      refetch();
+    } else {
+      Alert.alert("Error", "Failed to login");
     }
+  };
 
-  }
   return (
-    <SafeAreaView className='bg-white h-full'>
-      <ScrollView contentContainerClassName='h-full'>
-        <Image source={images.onboarding} className='w-full h-4/6' resizeMode='contain'/>
-        <View className='px-10'>
-          <Text className='text-base text-center uppercase font-rubik text-black-200'>Welcome to Restate</Text>
+    <SafeAreaView className="bg-white h-full">
+      <ScrollView
+        contentContainerStyle={{
+          height: "100%",
+        }}
+      >
+        <Image
+          source={images.onboarding}
+          className="w-full h-4/6"
+          resizeMode="contain"
+        />
+
+        <View className="px-10">
+          <Text className="text-base text-center uppercase font-rubik text-black-200">
+            Welcome To Real Scout
+          </Text>
 
           <Text className="text-3xl font-rubik-bold text-black-300 text-center mt-2">
             Let's Get You Closer To {"\n"}
@@ -29,7 +53,7 @@ const SignIn = () => {
           </Text>
 
           <Text className="text-lg font-rubik text-black-200 text-center mt-12">
-            Login to ReState with Google
+            Login to Real Scout with Google
           </Text>
 
           <TouchableOpacity
@@ -50,7 +74,7 @@ const SignIn = () => {
         </View>
       </ScrollView>
     </SafeAreaView>
-  )
-}
+  );
+};
 
-export default SignIn
+export default Auth;
