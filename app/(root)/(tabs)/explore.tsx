@@ -44,10 +44,12 @@ const Explore = () => {
 
   const handleCardPress = (id: string) => router.push(`/properties/${id}`);
 
+  console.log("Explore properties:", properties);
+
   return (
     <SafeAreaView className="h-full bg-white">
       <FlatList
-        data={properties}
+        data={Array.isArray(properties) ? properties : []} // ✅ safe
         numColumns={2}
         renderItem={({ item }) => (
           <Card item={item} onPress={() => handleCardPress(item.$id)} />
@@ -85,7 +87,7 @@ const Explore = () => {
               <Filters />
 
               <Text className="text-xl font-rubik-bold text-black-300 mt-5">
-                Found {properties?.length} Properties
+                Found {Array.isArray(properties) ? properties.length : 0} Properties
               </Text>
             </View>
           </View>
