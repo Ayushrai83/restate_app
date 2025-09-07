@@ -50,7 +50,7 @@ const Property = () => {
 
           {/* Back + Icons */}
           <View
-            className="z-50 absolute inset-x-7"
+            className="z-50 absolute inset-x-7 mt-5"
             style={{ top: Platform.OS === "ios" ? 70 : 20 }}
           >
             <View className="flex flex-row items-center w-full justify-between">
